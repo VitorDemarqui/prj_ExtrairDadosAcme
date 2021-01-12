@@ -1,6 +1,6 @@
-<Activity mc:Ignorable="sap sap2010" x:Class="Main" mva:VisualBasic.Settings="{x:Null}" sap:VirtualizedContainerService.HintSize="1210,830" sap2010:WorkflowViewState.IdRef="ActivityBuilder_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" mva:VisualBasic.Settings="{x:Null}" sap:VirtualizedContainerService.HintSize="1210,844" sap2010:WorkflowViewState.IdRef="ActivityBuilder_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <TextExpression.NamespacesForImplementation>
-    <scg:List x:TypeArguments="x:String" Capacity="24">
+    <scg:List x:TypeArguments="x:String" Capacity="26">
       <x:String>System.Activities</x:String>
       <x:String>System.Activities.Statements</x:String>
       <x:String>System.Activities.Expressions</x:String>
@@ -25,6 +25,8 @@
       <x:String>System.Runtime.Serialization</x:String>
       <x:String>System.Collections.ObjectModel</x:String>
       <x:String>System.Activities.DynamicUpdate</x:String>
+      <x:String>System.ComponentModel</x:String>
+      <x:String>System.Xml.Serialization</x:String>
     </scg:List>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -56,7 +58,16 @@
       <AssemblyReference>System.Memory</AssemblyReference>
     </scg:List>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap:VirtualizedContainerService.HintSize="376,204" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence sap:VirtualizedContainerService.HintSize="376,639" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="sd:DataTable" Name="var_dtDadosAcme" />
+      <Variable x:TypeArguments="x:Int32" Name="var_intCountTypeWI1" />
+      <Variable x:TypeArguments="x:Int32" Name="var_intCountTypeWI2" />
+      <Variable x:TypeArguments="x:Int32" Name="var_intCountTypeWI3" />
+      <Variable x:TypeArguments="x:Int32" Name="var_intCountTypeWI4" />
+      <Variable x:TypeArguments="x:Int32" Name="var_intCountTypeWI5" />
+      <Variable x:TypeArguments="x:Int32" Name="var_intTotalDados" />
+    </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -64,10 +75,41 @@
     </sap:WorkflowViewStateService.ViewState>
     <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke wf_LoginAcme workflow" sap:VirtualizedContainerService.HintSize="334,112" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Portal\wf_LoginAcme.xaml">
       <ui:InvokeWorkflowFile.Arguments>
-        <InArgument x:TypeArguments="x:String" x:Key="arg_inStrURL">
-          <Literal x:TypeArguments="x:String">https://acme-test.uipath.com/login</Literal>
-        </InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="arg_inStrURL">https://acme-test.uipath.com/login</InArgument>
       </ui:InvokeWorkflowFile.Arguments>
     </ui:InvokeWorkflowFile>
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke wf_extrairDadosAcme workflow" sap:VirtualizedContainerService.HintSize="334,112" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Portal\wf_extrairDadosAcme.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <OutArgument x:TypeArguments="sd:DataTable" x:Key="arg_outDtDadosAcme">
+          <mva:VisualBasicReference x:TypeArguments="sd:DataTable" ExpressionText="var_dtDadosAcme" />
+        </OutArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke wf_TratamentoDados workflow" sap:VirtualizedContainerService.HintSize="334,112" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="Excel\wf_ContadorDosDados.xaml">
+      <ui:InvokeWorkflowFile.Arguments>
+        <InArgument x:TypeArguments="sd:DataTable" x:Key="arg_inDtDadosAcme">
+          <mva:VisualBasicValue x:TypeArguments="sd:DataTable" ExpressionText="var_dtDadosAcme" />
+        </InArgument>
+        <OutArgument x:TypeArguments="x:Int32" x:Key="arg_outIntCountTypeWI5">
+          <mva:VisualBasicReference x:TypeArguments="x:Int32" ExpressionText="var_intCountTypeWI5" />
+        </OutArgument>
+        <OutArgument x:TypeArguments="x:Int32" x:Key="arg_outIntCountTypeWI4">
+          <mva:VisualBasicReference x:TypeArguments="x:Int32" ExpressionText="var_intCountTypeWI4" />
+        </OutArgument>
+        <OutArgument x:TypeArguments="x:Int32" x:Key="arg_outIntCountTypeWI3">
+          <mva:VisualBasicReference x:TypeArguments="x:Int32" ExpressionText="var_intCountTypeWI3" />
+        </OutArgument>
+        <OutArgument x:TypeArguments="x:Int32" x:Key="arg_outIntCountTypeWI2">
+          <mva:VisualBasicReference x:TypeArguments="x:Int32" ExpressionText="var_intCountTypeWI2" />
+        </OutArgument>
+        <OutArgument x:TypeArguments="x:Int32" x:Key="arg_outIntCountTypeWI1">
+          <mva:VisualBasicReference x:TypeArguments="x:Int32" ExpressionText="var_intCountTypeWI1" />
+        </OutArgument>
+        <OutArgument x:TypeArguments="x:Int32" x:Key="arg_outIntCountTotal">
+          <mva:VisualBasicReference x:TypeArguments="x:Int32" ExpressionText="var_intTotalDados" />
+        </OutArgument>
+      </ui:InvokeWorkflowFile.Arguments>
+    </ui:InvokeWorkflowFile>
+    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="334,91" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;WI1: &quot;+var_intCountTypeWI1.ToString+vbNewLine+&quot;WI2: &quot;+var_intCountTypeWI2.ToString+vbNewLine+&quot;WI3: &quot;+var_intCountTypeWI3.ToString+vbNewLine+&quot;WI4: &quot;+var_intCountTypeWI4.ToString+vbNewLine+&quot;WI5: &quot;+var_intCountTypeWI5.ToString+vbNewLine+&quot;Total: &quot;+var_intTotalDados.ToString]" />
   </Sequence>
 </Activity>
